@@ -1,0 +1,67 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum CustomerStatus {
+    ACTIVE
+    INACTIVE
+}
+
+enum SaleStatus {
+    PENDING
+    PAID
+    CANCELLED
+}
+
+model Customer {
+    id         String         @id @db.Uuid
+    name       String
+    email      String         @unique
+    nationalId String         @unique @map("national_id")
+    createdAt  DateTime       @default(now()) @map("created_at")
+    updatedAt  DateTime       @updatedAt @map("updated_at")
+    status     CustomerStatus @default(ACTIVE)
+
+    sales Sale[]
+
+    @@index([email], name: "idx_customers_email")
+    @@index([nationalId], name: "idx_customers_national_id")
+    @@map("customers")
+}
+
+model Sale {
+    id          String     @id @db.Uuid
+    vehicleId   String     @map("vehicle_id") @db.Uuid
+    customerId  String     @map("customer_id") @db.Uuid
+    saleDate    DateTime   @default(now()) @map("sale_date")
+    paymentCode String     @unique @map("payment_code")
+    totalPrice  Float      @map("total_price")
+    status      SaleStatus @default(PENDING) @map("status")
+    createdAt   DateTime   @default(now()) @map("created_at")
+    updatedAt   DateTime   @updatedAt @map("updated_at")
+
+    vehicle  Vehicle  @relation(fields: [vehicleId], references: [id])
+    customer Customer @relation(fields: [customerId], references: [id])
+
+    @@map("sales")
+}
+
+model Vehicle {
+    id        String   @id @db.Uuid
+    brand     String
+    model     String
+    year      Int
+    color     String
+    price     Float
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    sales Sale[]
+
+    @@map("vehicles")
+}

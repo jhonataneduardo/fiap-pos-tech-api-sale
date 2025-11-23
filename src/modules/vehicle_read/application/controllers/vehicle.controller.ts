@@ -1,0 +1,45 @@
+import { ListAllVehiclesUseCase } from "../usecases/list-all-vehicles.usecase";
+import { FindAvailableVehiclesUseCase } from "../usecases/find-available-vehicles.usecase";
+import { FindSoldVehiclesUseCase } from "../usecases/find-sold-vehicles.usecase";
+import { ListVehiclesPresenter } from "@/modules/vehicle_read/infrastructure/presenters/list-vehicles.presenter";
+import { AvailableVehiclesPresenter } from "@/modules/vehicle_read/infrastructure/presenters/available-vehicles.presenter";
+import { SoldVehiclesPresenter } from "@/modules/vehicle_read/infrastructure/presenters/sold-vehicles.presenter";
+
+/**
+ * VehicleController (Clean Architecture)
+ *
+ * Controller da camada de aplicação que orquestra use cases e presenters.
+ * NÃO conhece detalhes de HTTP (Request/Response).
+ * Recebe dados já parseados e retorna view models formatados.
+ */
+export class VehicleController {
+    constructor(
+        private readonly listAllVehiclesUseCase: ListAllVehiclesUseCase,
+        private readonly findAvailableVehiclesUseCase: FindAvailableVehiclesUseCase,
+        private readonly findSoldVehiclesUseCase: FindSoldVehiclesUseCase
+    ) { }
+
+    /**
+     * Lista todos os vehicles
+     */
+    async listAllVehicles() {
+        const vehicles = await this.listAllVehiclesUseCase.execute();
+        return ListVehiclesPresenter.present(vehicles);
+    }
+
+    /**
+     * Lista vehicles disponíveis (sem vendas)
+     */
+    async listAvailableVehicles() {
+        const vehicles = await this.findAvailableVehiclesUseCase.execute();
+        return AvailableVehiclesPresenter.present(vehicles);
+    }
+
+    /**
+     * Lista vehicles vendidos (com informações de venda)
+     */
+    async listSoldVehicles() {
+        const soldVehicles = await this.findSoldVehiclesUseCase.execute();
+        return SoldVehiclesPresenter.present(soldVehicles);
+    }
+}

@@ -1,0 +1,44 @@
+{
+    "name": "fiap-pos-tech-api-read",
+    "version": "1.0.0",
+    "description": "Read-only API for Vehicle Queries | Tech Challenge FIAP",
+    "main": "index.js",
+    "repository": "https://github.com/jhonataneduardo/fiap-pos-tech-api-read.git",
+    "author": "Jhonatan Eduardo <jhonatanepp@gmail.com>",
+    "license": "MIT",
+    "scripts": {
+        "dev": "ts-node-dev --respawn --transpile-only --require tsconfig-paths/register --ignore-watch node_modules src/server.ts",
+        "build": "tsc",
+        "start": "node -r tsconfig-paths/register dist/server.js",
+        "test": "jest",
+        "test:watch": "jest --watch"
+    },
+    "dependencies": {
+        "@prisma/client": "^6.11.0",
+        "cors": "^2.8.5",
+        "dotenv": "^17.0.1",
+        "express": "^5.1.0",
+        "helmet": "^8.1.0",
+        "jsonwebtoken": "^9.0.2",
+        "jwks-rsa": "^3.1.0",
+        "morgan": "^1.10.0",
+        "prisma": "^6.11.0",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^5.0.1",
+        "uuid": "^11.1.0",
+        "zod": "^3.25.71"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.3",
+        "@types/jsonwebtoken": "^9.0.7",
+        "@types/morgan": "^1.9.10",
+        "@types/node": "^24.0.10",
+        "@types/swagger-jsdoc": "^6.0.4",
+        "@types/swagger-ui-express": "^4.1.8",
+        "nodemon": "^3.1.10",
+        "ts-node-dev": "^2.0.0",
+        "tsconfig-paths": "^4.2.0",
+        "typescript": "^5.8.3"
+    }
+}
