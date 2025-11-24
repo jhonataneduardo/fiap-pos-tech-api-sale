@@ -48,6 +48,102 @@ src/
 - **Application**: Use Cases, DTOs, Application Controllers
 - **Infrastructure**: Implementações concretas (Prisma, Express, etc.)
 
+## 🚀 Início Rápido com Docker Compose
+
+Este repositório inclui um `docker-compose.yml` independente para executar o serviço isoladamente com seu próprio banco de dados PostgreSQL.
+
+### Pré-requisitos
+- Docker e Docker Compose instalados
+- Keycloak em execução (para autenticação JWT)
+
+### Configuração do Ambiente
+
+1. **Copiar arquivo de ambiente**:
+```bash
+cp .env.example .env
+```
+
+2. **Configurar ambiente** (editar `.env`):
+```bash
+# Database
+DB_NAME=fiap_read_api_db
+DB_USER=fiap_read_user
+DB_PASSWORD=fiap_read_password
+DB_PORT=5434
+
+# Development Service
+DEV_PORT=3003
+
+# Production Service  
+PRD_PORT=3004
+
+# Keycloak (must be accessible)
+KEYCLOAK_URL=http://localhost:8080
+KEYCLOAK_REALM=fiap-pos-tech
+KEYCLOAK_CLIENT_ID=pos-tech-api
+```
+
+### Executando em Modo de Desenvolvimento
+
+O modo de desenvolvimento inclui hot-reload para alterações de código:
+
+```bash
+# Iniciar banco de dados e serviço de desenvolvimento
+docker compose --profile dev up -d
+
+# Ver logs
+docker compose logs -f fiap-pos-tech-api-read-dev
+
+# Parar serviços
+docker compose --profile dev down
+```
+
+Acesse o serviço em: http://localhost:3003
+
+### Executando em Modo de Produção
+
+O modo de produção usa build otimizada:
+
+```bash
+# Compilar e iniciar banco de dados e serviço de produção
+docker compose --profile prd up -d --build
+
+# Ver logs
+docker compose logs -f fiap-pos-tech-api-read-prd
+
+# Parar serviços
+docker compose --profile prd down
+```
+
+Acesse o serviço em: http://localhost:3004
+
+### Gerenciamento do Banco de Dados
+
+```bash
+# Acessar banco de dados
+docker exec -it fiap-pos-tech-api-read-db psql -U fiap_read_user -d fiap_read_api_db
+
+# Executar migrações (do container)
+docker exec -it fiap-pos-tech-api-read-dev npx prisma migrate dev
+
+# Ver logs do banco de dados
+docker compose logs fiap-pos-tech-api-read-db
+```
+
+### Comandos Úteis
+
+```bash
+# Reconstruir serviços
+docker compose --profile dev build
+docker compose --profile prd build
+
+# Remover todos os dados (incluindo volume do banco de dados)
+docker compose down -v
+
+# Ver status de todos os serviços
+docker compose ps
+```
+
 ## 🚀 Desenvolvimento
 
 ### Pré-requisitos

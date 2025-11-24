@@ -1,0 +1,79 @@
+services:
+  fiap-pos-tech-api-read-db:
+    image: postgres:15-alpine
+    container_name: fiap-pos-tech-api-read-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-fiap_read_api_db}
+      POSTGRES_USER: ${DB_USER:-fiap_read_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-fiap_read_password}
+    ports:
+      - "${DB_PORT:-5434}:5432"
+    volumes:
+      - postgres_read_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER:-fiap_read_user}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - read-api-network
+
+  fiap-pos-tech-api-read-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: fiap-pos-tech-api-read-dev
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: ${DEV_PORT:-3003}
+      DATABASE_URL: postgresql://${DB_USER:-fiap_read_user}:${DB_PASSWORD:-fiap_read_password}@fiap-pos-tech-api-read-db:5432/${DB_NAME:-fiap_read_api_db}
+      KEYCLOAK_URL: ${KEYCLOAK_URL:-http://fiap-keycloak:8080}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM:-fiap-pos-tech}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-pos-tech-api}
+    ports:
+      - "${DEV_PORT:-3003}:3003"
+    volumes:
+      - ./src:/app/src
+      - ./prisma:/app/prisma
+      - /app/node_modules
+    depends_on:
+      fiap-pos-tech-api-read-db:
+        condition: service_healthy
+    networks:
+      - read-api-network
+    profiles:
+      - dev
+
+  fiap-pos-tech-api-read-prd:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fiap-pos-tech-api-read-prd
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: ${PRD_PORT:-3004}
+      DATABASE_URL: postgresql://${DB_USER:-fiap_read_user}:${DB_PASSWORD:-fiap_read_password}@fiap-pos-tech-api-read-db:5432/${DB_NAME:-fiap_read_api_db}
+      KEYCLOAK_URL: ${KEYCLOAK_URL:-http://fiap-keycloak:8080}
+      KEYCLOAK_REALM: ${KEYCLOAK_REALM:-fiap-pos-tech}
+      KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-pos-tech-api}
+    ports:
+      - "${PRD_PORT:-3004}:3004"
+    depends_on:
+      fiap-pos-tech-api-read-db:
+        condition: service_healthy
+    networks:
+      - read-api-network
+    profiles:
+      - prd
+
+volumes:
+  postgres_read_data:
+    driver: local
+
+networks:
+  read-api-network:
+    external: true
+    name: fiap-pos-tech-network
