@@ -9,7 +9,6 @@ import { PrismaVehicleRepository } from "@/modules/vehicle_read/infrastructure/d
 import { PrismaSaleRepository } from "@/modules/vehicle_sales/infrastructure/database/repositories/sale.repository";
 
 // Use Cases
-import { ListAllVehiclesUseCase } from "@/modules/vehicle_read/application/usecases/list-all-vehicles.usecase";
 import { FindAvailableVehiclesUseCase } from "@/modules/vehicle_read/application/usecases/find-available-vehicles.usecase";
 import { FindSoldVehiclesUseCase } from "@/modules/vehicle_read/application/usecases/find-sold-vehicles.usecase";
 import { RegisterNewSaleUseCase } from "@/modules/vehicle_sales/application/usecases/sale/register-new-sale.usecase";
@@ -44,11 +43,6 @@ export function setupDependencies(): void {
     // ==========================================
 
     // Vehicle Read Use Cases
-    container.registerFactory('ListAllVehiclesUseCase', () => {
-        const vehicleRepository = container.resolve<PrismaVehicleRepository>('VehicleRepository');
-        return new ListAllVehiclesUseCase(vehicleRepository);
-    });
-
     container.registerFactory('FindAvailableVehiclesUseCase', () => {
         const vehicleRepository = container.resolve<PrismaVehicleRepository>('VehicleRepository');
         return new FindAvailableVehiclesUseCase(vehicleRepository);
@@ -75,12 +69,10 @@ export function setupDependencies(): void {
     // CONTROLLERS (Clean Architecture - Application Layer)
     // ==========================================
     container.registerFactory('VehicleController', () => {
-        const listAllVehiclesUseCase = container.resolve('ListAllVehiclesUseCase');
         const findAvailableVehiclesUseCase = container.resolve('FindAvailableVehiclesUseCase');
         const findSoldVehiclesUseCase = container.resolve('FindSoldVehiclesUseCase');
         const { VehicleController } = require('@/modules/vehicle_read/application/controllers/vehicle.controller');
         return new VehicleController(
-            listAllVehiclesUseCase,
             findAvailableVehiclesUseCase,
             findSoldVehiclesUseCase
         );

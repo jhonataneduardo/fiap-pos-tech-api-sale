@@ -1,7 +1,5 @@
-import { ListAllVehiclesUseCase } from "../usecases/list-all-vehicles.usecase";
 import { FindAvailableVehiclesUseCase } from "../usecases/find-available-vehicles.usecase";
 import { FindSoldVehiclesUseCase } from "../usecases/find-sold-vehicles.usecase";
-import { ListVehiclesPresenter } from "@/modules/vehicle_read/infrastructure/presenters/list-vehicles.presenter";
 import { AvailableVehiclesPresenter } from "@/modules/vehicle_read/infrastructure/presenters/available-vehicles.presenter";
 import { SoldVehiclesPresenter } from "@/modules/vehicle_read/infrastructure/presenters/sold-vehicles.presenter";
 
@@ -14,18 +12,9 @@ import { SoldVehiclesPresenter } from "@/modules/vehicle_read/infrastructure/pre
  */
 export class VehicleController {
     constructor(
-        private readonly listAllVehiclesUseCase: ListAllVehiclesUseCase,
         private readonly findAvailableVehiclesUseCase: FindAvailableVehiclesUseCase,
         private readonly findSoldVehiclesUseCase: FindSoldVehiclesUseCase
     ) { }
-
-    /**
-     * Lista todos os vehicles
-     */
-    async listAllVehicles() {
-        const vehicles = await this.listAllVehiclesUseCase.execute();
-        return ListVehiclesPresenter.present(vehicles);
-    }
 
     /**
      * Lista vehicles disponíveis (sem vendas)

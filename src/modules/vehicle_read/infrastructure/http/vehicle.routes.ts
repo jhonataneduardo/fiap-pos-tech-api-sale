@@ -5,7 +5,6 @@ import { authenticate } from '@core/infrastructure/http/middlewares/auth.middlew
 const VehicleRouter = express.Router();
 
 // Todas as rotas de vehicles requerem autenticação
-VehicleRouter.get('/vehicles', authenticate, VehicleApiController.getAllVehicles);
 VehicleRouter.get('/vehicles/available', authenticate, VehicleApiController.getAvailableVehicles);
 VehicleRouter.get('/vehicles/sold', authenticate, VehicleApiController.getSoldVehicles);
 

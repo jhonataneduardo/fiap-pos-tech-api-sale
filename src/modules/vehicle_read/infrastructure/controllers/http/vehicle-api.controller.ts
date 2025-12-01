@@ -10,20 +10,6 @@ import { ApiResponseHandler } from "@/core/infrastructure/http/responses";
  */
 export class VehicleApiController {
     /**
-     * GET /vehicles - Lista todos os vehicles
-     */
-    static async getAllVehicles(req: Request, res: Response): Promise<void> {
-        try {
-            const vehicleController = container.resolve<VehicleController>('VehicleController');
-            const vehicles = await vehicleController.listAllVehicles();
-            ApiResponseHandler.success(res, vehicles);
-        } catch (error) {
-            console.error("Error fetching vehicles:", error);
-            ApiResponseHandler.error(res, error as Error);
-        }
-    }
-
-    /**
      * GET /vehicles/available - Lista vehicles disponíveis
      */
     static async getAvailableVehicles(req: Request, res: Response): Promise<void> {
