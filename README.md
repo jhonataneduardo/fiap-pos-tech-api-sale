@@ -92,7 +92,7 @@ O modo de desenvolvimento inclui hot-reload para alterações de código:
 docker compose --profile dev up -d
 
 # Ver logs
-docker compose logs -f fiap-pos-tech-api-read-dev
+docker compose logs -f fiap-pos-tech-api-sale-dev
 
 # Parar serviços
 docker compose --profile dev down
@@ -109,7 +109,7 @@ O modo de produção usa build otimizada:
 docker compose --profile prd up -d --build
 
 # Ver logs
-docker compose logs -f fiap-pos-tech-api-read-prd
+docker compose logs -f fiap-pos-tech-api-sale-prd
 
 # Parar serviços
 docker compose --profile prd down
@@ -121,13 +121,13 @@ Acesse o serviço em: http://localhost:3004
 
 ```bash
 # Acessar banco de dados
-docker exec -it fiap-pos-tech-api-read-db psql -U fiap_read_user -d fiap_read_api_db
+docker exec -it fiap-pos-tech-api-sale-db psql -U fiap_read_user -d fiap_read_api_db
 
 # Executar migrações (do container)
-docker exec -it fiap-pos-tech-api-read-dev npx prisma migrate dev
+docker exec -it fiap-pos-tech-api-sale-dev npx prisma migrate dev
 
 # Ver logs do banco de dados
-docker compose logs fiap-pos-tech-api-read-db
+docker compose logs fiap-pos-tech-api-sale-db
 ```
 
 ### Comandos Úteis
@@ -191,13 +191,13 @@ Este serviço está integrado ao `docker-compose.yml` do ambiente de desenvolvim
 
 ```bash
 # Ver logs do serviço
-docker-compose logs -f fiap-pos-tech-api-read
+docker-compose logs -f fiap-pos-tech-api-sale
 
 # Acessar shell do container
-docker-compose exec fiap-pos-tech-api-read sh
+docker-compose exec fiap-pos-tech-api-sale sh
 
 # Restart do serviço
-docker-compose restart fiap-pos-tech-api-read
+docker-compose restart fiap-pos-tech-api-sale
 ```
 
 ## 📚 Documentação da API

@@ -1,7 +1,7 @@
 services:
-  fiap-pos-tech-api-read-db:
+  fiap-pos-tech-api-sale-db:
     image: postgres:15-alpine
-    container_name: fiap-pos-tech-api-read-db
+    container_name: fiap-pos-tech-api-sale-db
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME:-fiap_read_api_db}
@@ -19,16 +19,16 @@ services:
     networks:
       - read-api-network
 
-  fiap-pos-tech-api-read-dev:
+  fiap-pos-tech-api-sale-dev:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: fiap-pos-tech-api-read-dev
+    container_name: fiap-pos-tech-api-sale-dev
     restart: unless-stopped
     environment:
       NODE_ENV: development
       PORT: ${DEV_PORT:-3003}
-      DATABASE_URL: postgresql://${DB_USER:-fiap_read_user}:${DB_PASSWORD:-fiap_read_password}@fiap-pos-tech-api-read-db:5432/${DB_NAME:-fiap_read_api_db}
+      DATABASE_URL: postgresql://${DB_USER:-fiap_read_user}:${DB_PASSWORD:-fiap_read_password}@fiap-pos-tech-api-sale-db:5432/${DB_NAME:-fiap_read_api_db}
       KEYCLOAK_URL: ${KEYCLOAK_URL:-http://fiap-keycloak:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-fiap-pos-tech}
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-pos-tech-api}
@@ -40,23 +40,23 @@ services:
       - ./prisma:/app/prisma
       - /app/node_modules
     depends_on:
-      fiap-pos-tech-api-read-db:
+      fiap-pos-tech-api-sale-db:
         condition: service_healthy
     networks:
       - read-api-network
     profiles:
       - dev
 
-  fiap-pos-tech-api-read-prd:
+  fiap-pos-tech-api-sale-prd:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: fiap-pos-tech-api-read-prd
+    container_name: fiap-pos-tech-api-sale-prd
     restart: unless-stopped
     environment:
       NODE_ENV: production
       PORT: ${PRD_PORT:-3004}
-      DATABASE_URL: postgresql://${DB_USER:-fiap_read_user}:${DB_PASSWORD:-fiap_read_password}@fiap-pos-tech-api-read-db:5432/${DB_NAME:-fiap_read_api_db}
+      DATABASE_URL: postgresql://${DB_USER:-fiap_read_user}:${DB_PASSWORD:-fiap_read_password}@fiap-pos-tech-api-sale-db:5432/${DB_NAME:-fiap_read_api_db}
       KEYCLOAK_URL: ${KEYCLOAK_URL:-http://fiap-keycloak:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-fiap-pos-tech}
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-pos-tech-api}
@@ -64,7 +64,7 @@ services:
     ports:
       - "${PRD_PORT:-3004}:3004"
     depends_on:
-      fiap-pos-tech-api-read-db:
+      fiap-pos-tech-api-sale-db:
         condition: service_healthy
     networks:
       - read-api-network

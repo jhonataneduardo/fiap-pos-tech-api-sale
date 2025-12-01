@@ -1,9 +1,9 @@
 {
-    "name": "fiap-pos-tech-api-read",
+    "name": "fiap-pos-tech-api-sale",
     "version": "1.0.0",
     "description": "Read-only API for Vehicle Queries | Tech Challenge FIAP",
     "main": "index.js",
-    "repository": "https://github.com/jhonataneduardo/fiap-pos-tech-api-read.git",
+    "repository": "https://github.com/jhonataneduardo/fiap-pos-tech-api-sale.git",
     "author": "Jhonatan Eduardo <jhonatanepp@gmail.com>",
     "license": "MIT",
     "scripts": {
