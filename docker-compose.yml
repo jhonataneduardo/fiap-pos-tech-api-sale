@@ -32,6 +32,7 @@ services:
       KEYCLOAK_URL: ${KEYCLOAK_URL:-http://fiap-keycloak:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-fiap-pos-tech}
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-pos-tech-api}
+      MAIN_API_URL: ${MAIN_API_URL:-http://fiap-pos-tech-api-dev:3001/api/v1}
     ports:
       - "${DEV_PORT:-3003}:3003"
     volumes:
@@ -59,6 +60,7 @@ services:
       KEYCLOAK_URL: ${KEYCLOAK_URL:-http://fiap-keycloak:8080}
       KEYCLOAK_REALM: ${KEYCLOAK_REALM:-fiap-pos-tech}
       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-pos-tech-api}
+      MAIN_API_URL: ${MAIN_API_URL:-http://fiap-pos-tech-api-dev:3001/api/v1}
     ports:
       - "${PRD_PORT:-3004}:3004"
     depends_on:
