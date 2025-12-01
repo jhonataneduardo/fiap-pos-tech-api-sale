@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import VehicleRouter from '@/modules/vehicle_read/infrastructure/http/vehicle.routes';
+import VehicleRouter from '@/modules/vehicle_sale/infrastructure/http/vehicle.routes';
 import SaleRouter from '@/modules/vehicle_sales/infrastructure/http/sale.routes';
 
 const mainRouter = Router();

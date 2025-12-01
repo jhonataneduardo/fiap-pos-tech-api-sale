@@ -1,5 +1,5 @@
 import { Vehicle } from "@prisma/client";
-import { VehicleEntity } from "@/modules/vehicle_read/domain/entities/vehicle.entity";
+import { VehicleEntity } from "@/modules/vehicle_sale/domain/entities/vehicle.entity";
 
 /**
  * VehicleMapper

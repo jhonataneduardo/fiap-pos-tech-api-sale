@@ -1,7 +1,7 @@
 import { FindAvailableVehiclesUseCase } from "../usecases/find-available-vehicles.usecase";
 import { FindSoldVehiclesUseCase } from "../usecases/find-sold-vehicles.usecase";
-import { AvailableVehiclesPresenter } from "@/modules/vehicle_read/infrastructure/presenters/available-vehicles.presenter";
-import { SoldVehiclesPresenter } from "@/modules/vehicle_read/infrastructure/presenters/sold-vehicles.presenter";
+import { AvailableVehiclesPresenter } from "@/modules/vehicle_sale/infrastructure/presenters/available-vehicles.presenter";
+import { SoldVehiclesPresenter } from "@/modules/vehicle_sale/infrastructure/presenters/sold-vehicles.presenter";
 
 /**
  * VehicleController (Clean Architecture)

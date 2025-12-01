@@ -5,12 +5,12 @@ import { systemConfig } from "@/config";
 import { HttpClient } from "@/core/infrastructure/http/http-client";
 
 // Repositories
-import { PrismaVehicleRepository } from "@/modules/vehicle_read/infrastructure/database/repositories/vehicle.repository";
+import { PrismaVehicleRepository } from "@/modules/vehicle_sale/infrastructure/database/repositories/vehicle.repository";
 import { PrismaSaleRepository } from "@/modules/vehicle_sales/infrastructure/database/repositories/sale.repository";
 
 // Use Cases
-import { FindAvailableVehiclesUseCase } from "@/modules/vehicle_read/application/usecases/find-available-vehicles.usecase";
-import { FindSoldVehiclesUseCase } from "@/modules/vehicle_read/application/usecases/find-sold-vehicles.usecase";
+import { FindAvailableVehiclesUseCase } from "@/modules/vehicle_sale/application/usecases/find-available-vehicles.usecase";
+import { FindSoldVehiclesUseCase } from "@/modules/vehicle_sale/application/usecases/find-sold-vehicles.usecase";
 import { RegisterNewSaleUseCase } from "@/modules/vehicle_sales/application/usecases/sale/register-new-sale.usecase";
 import { UpdatePaymentStatusUseCase } from "@/modules/vehicle_sales/application/usecases/sale/update-payment-status.usecase";
 
@@ -71,7 +71,7 @@ export function setupDependencies(): void {
     container.registerFactory('VehicleController', () => {
         const findAvailableVehiclesUseCase = container.resolve('FindAvailableVehiclesUseCase');
         const findSoldVehiclesUseCase = container.resolve('FindSoldVehiclesUseCase');
-        const { VehicleController } = require('@/modules/vehicle_read/application/controllers/vehicle.controller');
+        const { VehicleController } = require('@/modules/vehicle_sale/application/controllers/vehicle.controller');
         return new VehicleController(
             findAvailableVehiclesUseCase,
             findSoldVehiclesUseCase

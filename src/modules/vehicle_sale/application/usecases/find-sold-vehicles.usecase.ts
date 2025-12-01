@@ -1,4 +1,4 @@
-import { VehicleRepositoryInterface, SoldVehicle } from "@/modules/vehicle_read/domain/repositories/vehicle-repository.interface";
+import { VehicleRepositoryInterface, SoldVehicle } from "@/modules/vehicle_sale/domain/repositories/vehicle-repository.interface";
 
 export class FindSoldVehiclesUseCase {
     constructor(

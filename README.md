@@ -1,247 +1,143 @@
-# FIAP Pós-Tech API Read
+# FIAP Pós-Tech API Sale
 
-API read-only para consulta de veículos - Tech Challenge | Software Architecture FIAP
+API de vendas e consulta de veículos - Tech Challenge | Software Architecture FIAP
 
 ## 📋 Descrição
 
-Este serviço é responsável apenas por consultas (leitura) de dados de veículos. Ele compartilha o mesmo banco de dados da API principal (`fiap-pos-tech-api`) mas opera exclusivamente com operações GET, seguindo o princípio de segregação de responsabilidades.
+Serviço responsável por gestão de vendas de veículos e consultas. Mantém seu próprio banco de dados e integra-se com a API principal para sincronizar dados de clientes e veículos durante o processo de venda.
 
 ## 🎯 Endpoints
 
-Todos os endpoints requerem autenticação JWT (Bearer token obtido através do `fiap-pos-tech-auth`).
+### Veículos (Autenticado - JWT)
+- `GET /api/v1/vehicles/available` - Lista veículos disponíveis
+- `GET /api/v1/vehicles/sold` - Lista veículos vendidos com informações de venda
 
-### Veículos
+### Vendas
+- `POST /api/v1/sales` - Cria uma nova venda (Autenticado - JWT)
+- `POST /api/v1/webhook/payment` - Atualiza status de pagamento (Público - webhook)
 
-- **GET** `/api/v1/vehicles` - Lista todos os veículos
-- **GET** `/api/v1/vehicles/available` - Lista veículos disponíveis (não vendidos)
-- **GET** `/api/v1/vehicles/sold` - Lista veículos vendidos com informações de venda
-
-### Documentação
-
-- **GET** `/api-docs` - Swagger UI com documentação interativa
-- **GET** `/api/v1/health` - Health check do serviço
+### Sistema
+- `GET /api/v1/health` - Health check
+- `GET /api-docs` - Documentação Swagger
 
 ## 🏗️ Arquitetura
 
-O projeto segue **Clean Architecture** com **Domain-Driven Design (DDD)**:
+**Clean Architecture + DDD**
 
 ```
 src/
-├── core/                           # Camada central
-│   ├── domain/                     # Entidades base
-│   ├── application/                # Erros de aplicação
-│   └── infrastructure/             # Infraestrutura compartilhada
-│       ├── database/               # Prisma client
-│       ├── di/                     # Dependency Injection
-│       ├── http/                   # HTTP utilities
-│       └── swagger/                # API documentation
+├── core/                       # Infraestrutura compartilhada
+│   ├── application/            # Use case base, erros
+│   ├── domain/                 # Entidades base
+│   └── infrastructure/         # Database, DI, HTTP, Swagger
 └── modules/
-    └── vehicle_read/               # Módulo de leitura de veículos
-        ├── domain/                 # Entidades e interfaces
-        ├── application/            # Use cases, DTOs, controllers
-        └── infrastructure/         # Repositórios, presenters, HTTP
+    ├── vehicle_sale/           # Consulta de veículos
+    │   ├── domain/             # Entidades, interfaces
+    │   ├── application/        # Use cases, DTOs, controllers
+    │   └── infrastructure/     # Repositórios, routes
+    └── vehicle_sales/          # Gestão de vendas
+        ├── domain/             # Sale entity, enums, interfaces
+        ├── application/        # Use cases, DTOs, controllers
+        └── infrastructure/     # Repositórios, routes
 ```
 
-### Camadas
+### Stack
+- **Runtime**: Node.js 22 + TypeScript 5.8
+- **Framework**: Express.js 5.1
+- **ORM**: Prisma 6.11 + PostgreSQL 15
+- **Auth**: Keycloak (JWT via jsonwebtoken + jwks-rsa)
+- **Docs**: Swagger/OpenAPI
+- **Validação**: Zod 3.25
+- **Tests**: Jest 30 (80% coverage configurado)
 
-- **Domain**: Entidades de negócio e contratos (interfaces)
-- **Application**: Use Cases, DTOs, Application Controllers
-- **Infrastructure**: Implementações concretas (Prisma, Express, etc.)
+## 🚀 Quick Start
 
-## 🚀 Início Rápido com Docker Compose
-
-Este repositório inclui um `docker-compose.yml` independente para executar o serviço isoladamente com seu próprio banco de dados PostgreSQL.
-
-### Pré-requisitos
-- Docker e Docker Compose instalados
-- Keycloak em execução (para autenticação JWT)
-
-### Configuração do Ambiente
-
-1. **Copiar arquivo de ambiente**:
+### Desenvolvimento (com hot-reload)
 ```bash
-cp .env.example .env
+docker compose --profile dev up -d
+# Acesse: http://localhost:3003
+# Logs: docker compose logs -f fiap-pos-tech-api-sale-dev
 ```
 
-2. **Configurar ambiente** (editar `.env`):
+### Produção
 ```bash
-# Database
+docker compose --profile prd up -d --build
+# Acesse: http://localhost:3004
+# Logs: docker compose logs -f fiap-pos-tech-api-sale-prd
+```
+
+### Gerenciamento do Banco
+```bash
+# Executar migrações
+docker exec -it fiap-pos-tech-api-sale-dev npx prisma migrate dev
+
+# Acessar PostgreSQL
+docker exec -it fiap-pos-tech-api-sale-db psql -U fiap_read_user -d fiap_read_api_db
+
+# Limpar volumes (⚠️ remove dados)
+docker compose down -v
+```
+
+## ⚙️ Variáveis de Ambiente
+
+### Database
+```bash
+DATABASE_URL=postgresql://user:password@host:5432/database
 DB_NAME=fiap_read_api_db
 DB_USER=fiap_read_user
 DB_PASSWORD=fiap_read_password
 DB_PORT=5434
-
-# Development Service
-DEV_PORT=3003
-
-# Production Service  
-PRD_PORT=3004
-
-# Keycloak (must be accessible)
-KEYCLOAK_URL=http://localhost:8080
-KEYCLOAK_REALM=fiap-pos-tech
-KEYCLOAK_CLIENT_ID=pos-tech-api
 ```
 
-### Executando em Modo de Desenvolvimento
-
-O modo de desenvolvimento inclui hot-reload para alterações de código:
-
+### Server
 ```bash
-# Iniciar banco de dados e serviço de desenvolvimento
-docker compose --profile dev up -d
-
-# Ver logs
-docker compose logs -f fiap-pos-tech-api-sale-dev
-
-# Parar serviços
-docker compose --profile dev down
-```
-
-Acesse o serviço em: http://localhost:3003
-
-### Executando em Modo de Produção
-
-O modo de produção usa build otimizada:
-
-```bash
-# Compilar e iniciar banco de dados e serviço de produção
-docker compose --profile prd up -d --build
-
-# Ver logs
-docker compose logs -f fiap-pos-tech-api-sale-prd
-
-# Parar serviços
-docker compose --profile prd down
-```
-
-Acesse o serviço em: http://localhost:3004
-
-### Gerenciamento do Banco de Dados
-
-```bash
-# Acessar banco de dados
-docker exec -it fiap-pos-tech-api-sale-db psql -U fiap_read_user -d fiap_read_api_db
-
-# Executar migrações (do container)
-docker exec -it fiap-pos-tech-api-sale-dev npx prisma migrate dev
-
-# Ver logs do banco de dados
-docker compose logs fiap-pos-tech-api-sale-db
-```
-
-### Comandos Úteis
-
-```bash
-# Reconstruir serviços
-docker compose --profile dev build
-docker compose --profile prd build
-
-# Remover todos os dados (incluindo volume do banco de dados)
-docker compose down -v
-
-# Ver status de todos os serviços
-docker compose ps
-```
-
-## 🚀 Desenvolvimento
-
-### Pré-requisitos
-
-- Node.js 22+
-- PostgreSQL 15
-- Keycloak (para autenticação)
-
-### Variáveis de Ambiente
-
-```bash
-# Database
-DATABASE_URL=postgresql://user:password@host:5432/database
-
-# Server
-PORT=3003
+PORT=3003              # Dev: 3003, Prd: 3004
 NODE_ENV=development
+DEV_PORT=3003
+PRD_PORT=3004
+```
 
-# Keycloak (JWT validation)
-KEYCLOAK_URL=http://localhost:8080
+### Integração
+```bash
+MAIN_API_URL=http://fiap-pos-tech-api-dev:3001/api/v1  # URL da API principal
+```
+
+### Keycloak (Autenticação JWT)
+```bash
+KEYCLOAK_URL=http://fiap-keycloak:8080
 KEYCLOAK_REALM=fiap-pos-tech
 KEYCLOAK_CLIENT_ID=pos-tech-api
-```
-
-### Instalação Local
-
-```bash
-# Instalar dependências
-yarn install
-
-# Gerar Prisma Client
-npx prisma generate
-
-# Modo desenvolvimento (hot-reload)
-yarn dev
-
-# Build para produção
-yarn build
-yarn start
-```
-
-### Docker
-
-Este serviço está integrado ao `docker-compose.yml` do ambiente de desenvolvimento:
-
-```bash
-# Ver logs do serviço
-docker-compose logs -f fiap-pos-tech-api-sale
-
-# Acessar shell do container
-docker-compose exec fiap-pos-tech-api-sale sh
-
-# Restart do serviço
-docker-compose restart fiap-pos-tech-api-sale
-```
-
-## 📚 Documentação da API
-
-Acesse http://localhost:3003/api-docs para visualizar a documentação interativa Swagger.
-
-## 🧪 Testes
-
-```bash
-# Executar todos os testes
-yarn test
-
-# Modo watch
-yarn test:watch
 ```
 
 ## 🔐 Autenticação
 
-Todos os endpoints requerem um token JWT válido obtido através do serviço de autenticação:
+Endpoints protegidos requerem JWT Bearer token:
 
 ```bash
-# 1. Obter token
-curl -X POST http://localhost:3002/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"username":"user@example.com","password":"password"}'
+# 1. Obter token (via fiap-pos-tech-auth)
+curl -X POST http://localhost:8080/realms/fiap-pos-tech/protocol/openid-connect/token \
+  -d "client_id=pos-tech-api" \
+  -d "username=user@example.com" \
+  -d "password=password" \
+  -d "grant_type=password"
 
-# 2. Usar token nas requisições
-curl http://localhost:3003/api/v1/vehicles \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+# 2. Usar token
+curl http://localhost:3003/api/v1/vehicles/available \
+  -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-## 📝 Tecnologias
+## 🧪 Testes
 
-- **Runtime**: Node.js 22
-- **Framework**: Express.js
-- **ORM**: Prisma
-- **Database**: PostgreSQL 15
-- **Auth**: Keycloak (JWT)
-- **Documentation**: Swagger/OpenAPI
-- **Language**: TypeScript
+```bash
+yarn test              # Executar testes
+yarn test:watch        # Modo watch
+```
 
-## 📄 Licença
+**Configuração**: Jest com cobertura mínima de 80% (branches, functions, lines, statements)
 
-MIT
+## 📚 Documentação
+
+Acesse a documentação interativa: **http://localhost:3003/api-docs**
 
 ---
 

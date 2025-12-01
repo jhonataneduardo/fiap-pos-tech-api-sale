@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import prisma from '@/core/infrastructure/database/prisma.client';
-import { VehicleRepositoryInterface, SoldVehicle } from "@/modules/vehicle_read/domain/repositories/vehicle-repository.interface";
-import { VehicleEntity } from "@/modules/vehicle_read/domain/entities/vehicle.entity";
+import { VehicleRepositoryInterface, SoldVehicle } from "@/modules/vehicle_sale/domain/repositories/vehicle-repository.interface";
+import { VehicleEntity } from "@/modules/vehicle_sale/domain/entities/vehicle.entity";
 import { VehicleMapper } from "../mappers/vehicle.mapper";
 
 export class PrismaVehicleRepository implements VehicleRepositoryInterface {

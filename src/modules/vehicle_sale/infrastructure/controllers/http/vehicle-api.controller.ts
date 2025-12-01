@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "@/core/infrastructure/di/container";
-import { VehicleController } from "@/modules/vehicle_read/application/controllers/vehicle.controller";
+import { VehicleController } from "@/modules/vehicle_sale/application/controllers/vehicle.controller";
 import { ApiResponseHandler } from "@/core/infrastructure/http/responses";
 
 /**

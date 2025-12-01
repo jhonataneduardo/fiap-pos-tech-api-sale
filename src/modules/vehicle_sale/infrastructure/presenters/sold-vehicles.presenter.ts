@@ -1,4 +1,4 @@
-import { SoldVehicle } from "@/modules/vehicle_read/domain/repositories/vehicle-repository.interface";
+import { SoldVehicle } from "@/modules/vehicle_sale/domain/repositories/vehicle-repository.interface";
 import { SoldVehicleOutputDTO } from "../../application/dtos/vehicle.dto";
 
 export class SoldVehiclesPresenter {

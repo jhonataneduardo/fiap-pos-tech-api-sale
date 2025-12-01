@@ -1,5 +1,5 @@
-import { VehicleRepositoryInterface } from "@/modules/vehicle_read/domain/repositories/vehicle-repository.interface";
-import { VehicleEntity } from "@/modules/vehicle_read/domain/entities/vehicle.entity";
+import { VehicleRepositoryInterface } from "@/modules/vehicle_sale/domain/repositories/vehicle-repository.interface";
+import { VehicleEntity } from "@/modules/vehicle_sale/domain/entities/vehicle.entity";
 
 export class FindAvailableVehiclesUseCase {
     constructor(

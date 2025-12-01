@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosError } from 'axios';
+import axios from 'axios';
 import { NotFoundError, BadRequestError, UnauthorizedError } from '@core/application/errors/app.error';
 
 export interface HttpClientConfig {
@@ -8,7 +8,7 @@ export interface HttpClientConfig {
 }
 
 export class HttpClient {
-    private client: AxiosInstance;
+    private client: ReturnType<typeof axios.create>;
     private retries: number;
 
     constructor(config: HttpClientConfig) {
@@ -28,7 +28,7 @@ export class HttpClient {
         // Response interceptor for error handling
         this.client.interceptors.response.use(
             (response) => response,
-            async (error: AxiosError) => {
+            async (error: any) => {
                 if (error.response) {
                     // Server responded with error status
                     const status = error.response.status;
@@ -62,7 +62,7 @@ export class HttpClient {
             });
             
             // Handle API response format with 'content' wrapper
-            return response.data.content || response.data;
+            return (response.data as any).content || response.data;
         } catch (error) {
             throw error;
         }
@@ -75,7 +75,7 @@ export class HttpClient {
             });
             
             // Handle API response format with 'content' wrapper
-            return response.data.content || response.data;
+            return (response.data as any).content || response.data;
         } catch (error) {
             throw error;
         }
@@ -88,7 +88,7 @@ export class HttpClient {
             });
             
             // Handle API response format with 'content' wrapper
-            return response.data.content || response.data;
+            return (response.data as any).content || response.data;
         } catch (error) {
             throw error;
         }
@@ -101,7 +101,7 @@ export class HttpClient {
             });
             
             // Handle API response format with 'content' wrapper
-            return response.data.content || response.data;
+            return (response.data as any).content || response.data;
         } catch (error) {
             throw error;
         }

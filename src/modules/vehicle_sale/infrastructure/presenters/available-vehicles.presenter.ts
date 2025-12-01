@@ -1,4 +1,4 @@
-import { VehicleEntity } from "@/modules/vehicle_read/domain/entities/vehicle.entity";
+import { VehicleEntity } from "@/modules/vehicle_sale/domain/entities/vehicle.entity";
 import { VehicleOutputDTO } from "../../application/dtos/vehicle.dto";
 
 export class AvailableVehiclesPresenter {
