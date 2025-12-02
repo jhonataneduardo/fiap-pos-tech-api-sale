@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
-yarn.lock
+# yarn.lock should be committed for reproducible builds
+# package-lock.json ignored in favor of yarn.lock
 package-lock.json
 
 # Build output
