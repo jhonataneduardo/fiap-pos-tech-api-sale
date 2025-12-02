@@ -72,6 +72,14 @@ jobs:
       - name: Run tests
         run: npx jest --ci --coverage --maxWorkers=2
 
+      - name: Display coverage summary
+        if: always()
+        run: |
+          echo "📊 Coverage Report Summary"
+          echo "============================="
+          npx jest --ci --coverage --coverageReporters=text-summary --silent || true
+          echo "============================="
+
       - name: Upload coverage reports
         uses: codecov/codecov-action@v4
         if: always()

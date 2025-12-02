@@ -122,6 +122,14 @@ jobs:
       - name: Run tests with coverage
         run: npx jest --ci --coverage --maxWorkers=2
 
+      - name: Display coverage summary
+        if: always()
+        run: |
+          echo "📊 Coverage Report Summary"
+          echo "============================="
+          npx jest --ci --coverage --coverageReporters=text-summary --silent || true
+          echo "============================="
+
       - name: Check coverage thresholds
         run: |
           echo "📊 Validating coverage thresholds (80% required)..."
