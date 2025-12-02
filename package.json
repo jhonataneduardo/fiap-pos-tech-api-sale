@@ -1,9 +1,9 @@
 {
-    "name": "fiap-pos-tech-api-read",
+    "name": "fiap-pos-tech-api-sale",
     "version": "1.0.0",
     "description": "Read-only API for Vehicle Queries | Tech Challenge FIAP",
     "main": "index.js",
-    "repository": "https://github.com/jhonataneduardo/fiap-pos-tech-api-read.git",
+    "repository": "https://github.com/jhonataneduardo/fiap-pos-tech-api-sale.git",
     "author": "Jhonatan Eduardo <jhonatanepp@gmail.com>",
     "license": "MIT",
     "scripts": {
@@ -11,10 +11,12 @@
         "build": "tsc",
         "start": "node -r tsconfig-paths/register dist/server.js",
         "test": "jest",
-        "test:watch": "jest --watch"
+        "test:watch": "jest --watch",
+        "test:coverage": "jest --coverage"
     },
     "dependencies": {
         "@prisma/client": "^6.11.0",
+        "axios": "^1.13.2",
         "cors": "^2.8.5",
         "dotenv": "^17.0.1",
         "express": "^5.1.0",
@@ -29,6 +31,7 @@
         "zod": "^3.25.71"
     },
     "devDependencies": {
+        "@types/axios": "^0.9.36",
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.3",
         "@types/jest": "^30.0.0",

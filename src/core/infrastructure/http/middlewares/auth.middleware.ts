@@ -93,9 +93,9 @@ export const authenticate = async (
             getKey,
             {
                 algorithms: ['RS256'],
-                issuer: validIssuers, // Aceita múltiplos issuers
+                issuer: validIssuers as any, // Aceita múltiplos issuers
             },
-            (err, decoded) => {
+            (err: any, decoded: any) => {
                 if (err) {
                     let message = 'Token inválido';
 

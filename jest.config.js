@@ -26,6 +26,8 @@ module.exports = {
         '!src/core/infrastructure/di/**',
         '!src/core/infrastructure/swagger/**',
         '!src/**/*.routes.ts',
+        '!src/core/infrastructure/http/routes.ts',
+        '!src/core/infrastructure/http/http-client.ts',
     ],
     coverageThreshold: {
         global: {

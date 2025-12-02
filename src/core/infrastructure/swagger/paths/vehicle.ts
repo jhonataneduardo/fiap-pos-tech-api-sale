@@ -1,32 +1,4 @@
 export const vehiclePaths = {
-    '/vehicles': {
-        get: {
-            tags: ['Vehicles'],
-            summary: 'Lista todos os veículos',
-            description: 'Retorna a lista completa de todos os veículos cadastrados',
-            security: [{ BearerAuth: [] }],
-            responses: {
-                200: {
-                    description: 'Lista de veículos retornada com sucesso',
-                    content: {
-                        'application/json': {
-                            schema: {
-                                type: 'object',
-                                properties: {
-                                    success: { type: 'boolean', example: true },
-                                    content: {
-                                        type: 'array',
-                                        items: { $ref: '#/components/schemas/Vehicle' }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                401: { description: 'Não autenticado' }
-            }
-        }
-    },
     '/vehicles/available': {
         get: {
             tags: ['Vehicles'],
